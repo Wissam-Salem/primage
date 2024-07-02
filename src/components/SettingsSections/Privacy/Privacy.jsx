@@ -10,7 +10,6 @@ export default function Privacy() {
   let { setSection } = useContext(AppContext);
   let [newPassword, setNewPassword] = useState("");
   let [confirmPassword, setConfirmPassword] = useState("");
-  let [response, setResponse] = useState(null);
   let [messageApi, contextHolder] = message.useMessage();
   let items = [
     {
@@ -58,26 +57,26 @@ export default function Privacy() {
         <button
           className="w-full"
           onClick={() => {
-            setSection("notifications");
+            setSection("posts");
           }}
         >
-          Notifications
+          Posts
         </button>
       ),
     },
   ];
 
-  let success = () => {
+  let success = (message) => {
     messageApi.open({
       type: "success",
-      content: "Password has been changed",
+      content: message,
     });
   };
 
-  let error = () => {
+  let error = (message) => {
     messageApi.open({
       type: "error",
-      content: "Error! please try again",
+      content: message,
     });
   };
 
@@ -94,16 +93,17 @@ export default function Privacy() {
         }
       )
       .then((res) => {
-        res.data.success && success();
+        res.data.success && success(res.data.message);
       })
       .catch((error) => {
+        error("Error! please try again");
         console.log(error);
       });
   };
 
   let handleDeleteUser = () => {
     axios
-      .get("http://192.168.0.106:5000/delete-user", {
+      .get(`${URL}/delete-user`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -148,18 +148,7 @@ export default function Privacy() {
           </Dropdown>
         </div>
       </div>
-      <div className="mt-3 w-[95%]">
-        {response &&
-          (response ? (
-            <Alert
-              type="success"
-              message="Password has been changed"
-              showIcon
-            />
-          ) : (
-            <Alert type="error" message="Error! please try again" showIcon />
-          ))}
-      </div>
+      <div className="mt-3 w-[95%]"></div>
       <div className="flex flex-col max-md:items-center pt-5 max-md:pt-24 gap-7 top-8">
         <div className="flex flex-col w-[20rem]">
           <label htmlFor="newPassword">New password</label>

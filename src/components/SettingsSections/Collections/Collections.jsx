@@ -5,15 +5,9 @@ import { Dropdown } from "antd";
 import { AppContext } from "../../Context/Context";
 
 export default function Collections() {
+  let URL = process.env.REACT_APP_API;
   let { setSection } = useContext(AppContext);
-  let [favorate, setFavorate] = useState([
-    "https://i.pinimg.com/564x/6d/f0/9f/6df09f4164d00f09f3186d8bde69c288.jpg",
-    "https://i.pinimg.com/564x/ab/bb/ef/abbbef3d1304ecea1535af565562823f.jpg",
-    "https://i.pinimg.com/564x/07/12/28/0712286f3de78b8a8957aed7745e2812.jpg",
-    "https://i.pinimg.com/564x/6d/f0/9f/6df09f4164d00f09f3186d8bde69c288.jpg",
-    "https://i.pinimg.com/564x/6d/f0/9f/6df09f4164d00f09f3186d8bde69c288.jpg",
-    "https://i.pinimg.com/564x/6d/f0/9f/6df09f4164d00f09f3186d8bde69c288.jpg",
-  ]);
+  let [favorate, setFavorate] = useState([]);
   let items = [
     {
       key: "1",
@@ -60,28 +54,28 @@ export default function Collections() {
         <button
           className="w-full"
           onClick={() => {
-            setSection("notifications");
+            setSection("posts");
           }}
         >
-          Notifications
+          Posts
         </button>
       ),
     },
   ];
-  
-  // useEffect(() => {
-  //   axios
-  //     .get("http://192.168.0.106:5000/get-favorate-images", {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data.favorates);
-  //       setFavorate(res.data.favorates);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${URL}/get-favorate-images`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data.favorates);
+        setFavorate(res.data.favorates);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="max-md:pb-32 max-sm:pb-28 mt-4">
@@ -112,9 +106,9 @@ export default function Collections() {
           </button>
         </Dropdown>
       </div>
-      <div className="flex justify-center gap-3 flex-wrap pt-10">
-        {favorate.map((image) => {
-          return <FavorateImage image={image} />;
+      <div className="flex justify-center gap-3 flex-wrap mt-5 p-3">
+        {favorate?.map((image) => {
+          return <FavorateImage image={image} key={image} />;
         })}
       </div>
     </div>

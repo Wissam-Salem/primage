@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Header from "../../components/Header/Header";
 import Profile from "../../components/SettingsSections/Profile/Profile";
 import axios from "axios";
 import Privacy from "../../components/SettingsSections/Privacy/Privacy";
 import Collections from "../../components/SettingsSections/Collections/Collections";
 import { AppContext } from "../../components/Context/Context";
-import Notifications from "../../components/SettingsSections/Notifications/Notifications";
+import Posts from "../../components/SettingsSections/Posts/Posts";
 
 export default function Settings() {
   let URL = process.env.REACT_APP_API;
@@ -58,10 +58,10 @@ export default function Settings() {
             <li
               className="w-fit"
               onClick={() => {
-                setSection("notifications");
+                setSection("posts");
               }}
             >
-              <a href="#">Notifications</a>
+              <a href="#">Posts</a>
             </li>
           </ul>
         </div>
@@ -69,8 +69,8 @@ export default function Settings() {
           <Privacy />
         ) : section === "collections" ? (
           <Collections />
-        ) : section === "notifications" ? (
-          <Notifications />
+        ) : section === "posts" ? (
+          <Posts />
         ) : (
           <Profile />
         )}

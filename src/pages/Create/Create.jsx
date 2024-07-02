@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
+import { message } from "antd";
 import axios from "axios";
 
 export default function Create() {
@@ -7,6 +8,19 @@ export default function Create() {
   let [url, setUrl] = useState(null);
   let [tags, setTags] = useState(null);
   let [fileName, setFileName] = useState("");
+  let [messageApi, contextHolder] = message.useMessage();
+  let success = (message) => {
+    messageApi.open({
+      type: "success",
+      content: message,
+    });
+  };
+  let error = (message) => {
+    messageApi.open({
+      type: "error",
+      content: message,
+    });
+  };
 
   useEffect(() => {
     axios
@@ -54,18 +68,22 @@ export default function Create() {
         }
       )
       .then((res) => {
+        res.data.success && success(res.data.message);
+        res.data.success === false && error(res.data.message);
         console.log(res.data.message);
       })
       .catch((err) => {
+        error("Error! please try again");
         console.log(err);
       });
   };
 
   return (
     <div>
+      {contextHolder}
       <Header />
       <div className="h-[calc(100vh-300px)] max-md:h-[calc(100vh-250px)] flex max-md:flex-col justify-center items-center gap-32 max-md:gap-10">
-        <div className="text-center">
+        <div className="flex flex-col items-center text-center">
           <label
             className="flex flex-col justify-center items-center gap-3 w-[333px] h-[274px] rounded-[30px] cursor-pointer bg-[#D9D9D9]"
             htmlFor="post"
@@ -88,7 +106,9 @@ export default function Create() {
             </p>
             <p>Choose an image from here</p>
           </label>
-          <p className="mt-2">{fileName}</p>
+          <p className="w-32 whitespace-nowrap overflow-hidden text-ellipsis mt-2">
+            {fileName}
+          </p>
         </div>
         <div className="flex flex-col items-center gap-5 mt-14 max-md:mt-0">
           <input

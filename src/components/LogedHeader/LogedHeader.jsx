@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../Context/Context";
 
 export default function LogedHeader() {
+  let [search, setSearch] = useState("");
   let URL = process.env.REACT_APP_API;
   let { pfp } = useContext(AppContext);
 
@@ -19,6 +20,7 @@ export default function LogedHeader() {
         console.log(err);
       });
   };
+
   return (
     <>
       <div className="absolute right-1 mr-3 text-white max-md:hidden">
@@ -28,8 +30,11 @@ export default function LogedHeader() {
               className="py-3 px-4 rounded-[40px] text-black bg-[#D9D9D9] outline-purple-500"
               type="text"
               placeholder="Search for image"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
             />
-            <a href="#">
+            <a href={`/search/${search}`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -138,7 +143,7 @@ export default function LogedHeader() {
                   </a>
                 </li>
                 <li>
-                  <a
+                  <button
                     onClick={() => {
                       handleLogOut();
                     }}
@@ -158,7 +163,7 @@ export default function LogedHeader() {
                       />
                     </svg>
                     Log-out
-                  </a>
+                  </button>
                 </li>
               </ul>
             </a>
@@ -189,7 +194,7 @@ export default function LogedHeader() {
             className="dropdown-content z-50 menu p-2 shadow bg-base-100 text-black rounded-box w-52"
           >
             <li>
-              <a href="settings">
+              <a href="/settings">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -327,9 +332,12 @@ export default function LogedHeader() {
                   <input
                     className="w-[90%] py-3 px-4 rounded-[40px] text-black bg-[#D9D9D9] outline-purple-500"
                     type="text"
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
                     placeholder="Search for image"
                   />
-                  <a href="#">
+                  <a href={`/search/${search}`}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

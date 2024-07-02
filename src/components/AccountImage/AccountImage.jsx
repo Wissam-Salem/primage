@@ -1,28 +1,29 @@
-import React, { useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../Image/Image.css";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import random from "random-string-generator";
-import axios from "axios";
-import "./Image.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { message } from "antd";
+import axios from "axios";
+import random from "random-string-generator";
+import React, { useRef } from "react";
 
-export default function Image({ image, user, pfp }) {
+export default function AccountImage({ image }) {
   let URL = process.env.REACT_APP_API;
   let modalImage = useRef(null);
   let randomName = random();
-  const [messageApi, contextHolder] = message.useMessage();
-  const success = (message) => {
+  let [messageApi, contextHolder] = message.useMessage();
+  let success = (message) => {
     messageApi.open({
       type: "success",
       content: message,
     });
   };
-  const error = (message) => {
+  let error = (message) => {
     messageApi.open({
       type: "error",
       content: message,
     });
   };
+
   let handleFavorates = () => {
     axios
       .post(
@@ -47,31 +48,18 @@ export default function Image({ image, user, pfp }) {
   return (
     <>
       {contextHolder}
-      <div>
+      <div className="h-fit">
         <a
           href="#"
           className="bg-red-400 w-fit h-fit rounded-[25px]"
           onClick={() => modalImage.current.showModal()}
         >
           <img
-            className="w-52 h-52 max-md:w-40 max-md:h-40 object-cover rounded-[25px]"
+            className="w-40 h-40 max-md:w-32 max-md:h-32 object-cover rounded-[25px]"
             src={image}
             alt="pic"
           />
         </a>
-        <div className="flex items-center gap-2 text-[.9rem] my-1">
-          <a href={`/user/${user}`}>
-            <img
-              className="w-10 h-10 rounded-full object-cover"
-              src={
-                pfp ||
-                "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png"
-              }
-              alt=""
-            />
-          </a>
-          <h1>{user}</h1>
-        </div>
       </div>
       <dialog ref={modalImage} id="my_modal_5" className="modal">
         <div className="modal-box flex justify-between w-fit bg-transparent shadow-none cursor-default">

@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../../Context/Context";
-import { Dropdown } from "antd";
+import { Dropdown, message } from "antd";
 
 export default function Profile() {
   let URL = process.env.REACT_APP_API;
@@ -11,6 +11,20 @@ export default function Profile() {
   let [newBio, setNewBio] = useState(null);
   let [newPfp, setNewPfp] = useState(null);
   let usernameInput = useRef(null);
+  const [messageApi, contextHolder] = message .useMessage();
+  const success = (message) => {
+    messageApi.open({
+      type: "success",
+      content: message,
+    });
+  };
+  const error = (message) => {
+    messageApi.open({
+      type: "error",
+      content: message,
+    });
+  };
+
   let items = [
     {
       key: "1",
@@ -57,10 +71,10 @@ export default function Profile() {
         <button
           className="w-full"
           onClick={() => {
-            setSection("notifications");
+            setSection("posts");
           }}
         >
-          Notifications
+          Posts
         </button>
       ),
     },
@@ -104,7 +118,11 @@ export default function Profile() {
           }
         )
         .then((res) => {
+          res.data.success && success(res.data.message);
           console.log(res.data.message);
+        })
+        .catch((error) => {
+          error("Error! please try again");
         });
     }
 
@@ -120,7 +138,11 @@ export default function Profile() {
           }
         )
         .then((res) => {
+          res.data.success && success(res.data.message);
           console.log(res.data.message);
+        })
+        .catch((error) => {
+          error("Error! please try again");
         });
     }
 
@@ -136,13 +158,18 @@ export default function Profile() {
           }
         )
         .then((res) => {
+          res.data.success && success(res.data.message);
           console.log(res.data.message);
+        })
+        .catch((error) => {
+          error("Error! please try again");
         });
     }
   };
 
   return (
     <div className="max-md:pb-32 max-sm:pb-28 mt-4">
+      {contextHolder}
       <div className="max-md:px-5">
         <div className="flex items-center justify-between">
           <h3 className="text-[#6B6B6B]">Settings {">"} Profile</h3>

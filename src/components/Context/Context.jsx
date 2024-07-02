@@ -9,11 +9,7 @@ export default function Context() {
   let [pfp, setPfp] = useState("");
   let [bio, setBio] = useState("");
   let [section, setSection] = useState("");
-  let [notifications, setNotifications] = useState({
-    one: false,
-    two: false,
-    three: false,
-  });
+  let [posts, setPosts] = useState([]);
 
   useEffect(() => {
     axios
@@ -25,7 +21,7 @@ export default function Context() {
         setUsername(res.data?.sendUser?.username);
         setPfp(res.data?.sendUser?.pfp);
         setBio(res.data?.sendUser?.bio);
-        setNotifications(res.data.notifications);
+        setPosts(res.data.sendUser?.posts);
       })
       .catch((err) => {
         console.log(err);
@@ -33,9 +29,7 @@ export default function Context() {
   }, []);
 
   return (
-    <AppContext.Provider
-      value={{ username, pfp, bio, section, notifications, setSection }}
-    >
+    <AppContext.Provider value={{ username, pfp, bio, posts, section, setSection }}>
       <App />
     </AppContext.Provider>
   );

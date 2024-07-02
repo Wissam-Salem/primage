@@ -4,15 +4,15 @@ import { Alert } from "antd";
 import axios from "axios";
 
 export default function GetStarted() {
-  let URL = process.env.REACT_APP_API;
   let [username, setUsername] = useState("");
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [success, setSuccess] = useState(null);
   let [message, setMessage] = useState("");
+  
   useEffect(() => {
     axios
-      .get(`${URL}/authenticate`, {
+      .get(`${process.env.REACT_APP_API}/authenticate`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -27,7 +27,7 @@ export default function GetStarted() {
   let handleRegister = () => {
     axios
       .post(
-        `${URL}/register`,
+        `${process.env.REACT_APP_API}/register`,
         {
           username,
           email,
@@ -50,7 +50,7 @@ export default function GetStarted() {
   let handleLogin = () => {
     axios
       .post(
-        `${URL}/login`,
+        `${process.env.REACT_APP_API}/login`,
         {
           username,
           email,

@@ -4,16 +4,16 @@ import Image from "../../components/Image/Image";
 import axios from "axios";
 
 export default function Home() {
-  let URL = process.env.REACT_APP_API;
   let [images, setImages] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${URL}/authenticate`, {
+      .get(`${process.env.REACT_APP_API}/authenticate`, {
         withCredentials: true,
       })
       .then((res) => {
         console.log(res.data.success);
+        setImages(res.data.images);
         res.data.success === false && window.location.assign("/");
       })
       .catch((err) => {
@@ -21,19 +21,6 @@ export default function Home() {
       });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get(`${URL}/get-images`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data.images);
-        setImages(res.data.images);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
   return (
     <div>
       <Header />

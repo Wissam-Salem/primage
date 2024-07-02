@@ -1,34 +1,34 @@
 import React, { useRef } from "react";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faTrash } from "@fortawesome/free-solid-svg-icons";
 import random from "random-string-generator";
-import axios from "axios";
 import { message } from "antd";
 
-export default function FavorateImage({ image }) {
+export default function PostImage({ post }) {
   let URL = process.env.REACT_APP_API;
   let modalImage = useRef(null);
   let randomName = random();
-  let [messageApi, contextHolder] = message.useMessage();
-  let success = (message) => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = (message) => {
     messageApi.open({
       type: "success",
       content: message,
     });
   };
-  let error = (message) => {
+  const error = (message) => {
     messageApi.open({
       type: "error",
       content: message,
     });
   };
 
-  let handleremoveFavorate = () => {
+  let handleRemovePosts = () => {
     axios
       .post(
-        `${URL}/remove-from-favorate`,
+        `${URL}/delete-post`,
         {
-          image,
+          post,
         },
         {
           withCredentials: true,
@@ -36,16 +36,16 @@ export default function FavorateImage({ image }) {
       )
       .then((res) => {
         res.data.success && success(res.data.message);
-        console.log(res.data.message);
+        console.log(res.data);
       })
-      .catch((err) => {
+      .catch((error) => {
         error("Error! please try again");
-        console.log(err);
+        console.log(error);
       });
   };
+
   return (
     <>
-      {contextHolder}
       <div>
         <a
           href="#"
@@ -54,7 +54,7 @@ export default function FavorateImage({ image }) {
         >
           <img
             className="w-52 h-52 max-md:w-40 max-md:h-40 object-cover rounded-[25px]"
-            src={image}
+            src={post}
             alt="pic"
           />
         </a>
@@ -63,17 +63,17 @@ export default function FavorateImage({ image }) {
         <div className="modal-box flex justify-between w-fit bg-transparent shadow-none cursor-default">
           <div className="relative w-72 max-md:w-56">
             <div className="w-fit fit">
-              <img className="rounded-md" src={image} alt="" />
+              <img className="rounded-md" src={post} alt="" />
             </div>
             <div className="w-full h-10 flex justify-between items-center px-4 absolute top-3">
               <button
                 onClick={() => {
-                  handleremoveFavorate();
+                  handleRemovePosts();
                 }}
               >
                 <FontAwesomeIcon icon={faTrash} color="red" size="xl" />
               </button>
-              <a href={image} download={randomName + ".png"}>
+              <a href={post} download={randomName + ".png"}>
                 <FontAwesomeIcon icon={faDownload} size="xl" color="white" />
               </a>
             </div>
